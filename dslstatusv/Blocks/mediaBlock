@@ -1,0 +1,37 @@
+// Function to truncate a string to the maximum allowed length
+void truncate_string(char *str, size_t maxlen) {
+    if (strlen(str) > maxlen) {
+        str[maxlen] = '\0';  // Null-terminate the string at the max length
+    }
+}
+
+// Function to get the currently playing media title and artist
+const char* get_player_metadata() {
+    static char buffer[100];  // Buffer to hold metadata
+
+    // Command to fetch metadata from the currently playing player
+    FILE *fp = popen(
+        "playerctl -a metadata --format '{{playerInstance}} {{status}} {{artist}} - {{title}}' 2>/dev/null | "
+        "awk '/Playing/ {print $0; exit}'", 
+        "r"
+    );
+
+    if (fp) {
+        if (fgets(buffer, sizeof(buffer), fp)) {
+            // Extract artist and title from the output
+            char *artist_title = strstr(buffer, "Playing");
+            if (artist_title) {
+                artist_title += 7; // Skip "Playing "
+                // Remove newline and truncate if needed
+                artist_title[strcspn(artist_title, "\n")] = '\0';
+                truncate_string(artist_title, MAXLEN);
+                pclose(fp);
+                return artist_title;
+            }
+        }
+        pclose(fp);
+    }
+
+    // Fallback if no player is playing
+    return "No audio playing";
+}
