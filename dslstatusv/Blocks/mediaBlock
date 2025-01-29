@@ -1,28 +1,24 @@
 // Function to get the currently playing media title and artist
 const char* get_player_metadata() {
-    static char buffer[100];  // Buffer to hold metadata
+    static char buffer[128];  
 
     // Command to fetch metadata from the currently playing player
     FILE *fp = popen(
-        "playerctl -a metadata --format '{{playerInstance}} {{status}} {{artist}} - {{title}}' 2>/dev/null | "
-        "awk '/Playing/ {print substr($0, 1, 40); exit}'", 
+        "playerctl -a metadata --format '{{playerInstance}} {{status}} - {{title}}' 2>/dev/null | "
+        "awk -F'Playing ' '/Playing/ {print substr($2, 1, 35); exit}'",
         "r"
     );
 
     if (fp) {
         if (fgets(buffer, sizeof(buffer), fp)) {
-            // Extract artist and title from the output
-            char *artist_title = strstr(buffer, "Playing");
-            if (artist_title) {
-                artist_title += 7; // Skip "Playing "
-                artist_title[strcspn(artist_title, "\n")] = '\0';
-                pclose(fp);
-                return artist_title;
-            }
+            // Remove the newline character from the output
+            buffer[strcspn(buffer, "\n")] = '\0';
+            pclose(fp);
+            return buffer;
         }
         pclose(fp);
     }
 
-    // Fallback if no player is playing
+    // Fallback if no player is playing or if the command fails
     return "No audio playing";
 }
