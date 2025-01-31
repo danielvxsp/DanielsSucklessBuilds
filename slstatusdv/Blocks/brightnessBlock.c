@@ -1,4 +1,4 @@
-static const char *
+const char *
 brightness(const char *unused) {
     static char temp[16];        // Buffer for the brightness value
     char buffer[32];             // Temporary buffer for formatted output
