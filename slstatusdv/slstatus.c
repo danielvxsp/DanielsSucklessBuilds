@@ -17,6 +17,7 @@ struct arg {
 	const char *args;
 	unsigned int turn;
 	int signal;
+	const char *delim;
 };
 
 char buf[1024];
@@ -43,12 +44,14 @@ usage(void)
 	die("usage: %s [-v] [-s] [-1]", argv0);
 }
 
+// Render logic changed for delimiter feature
 static void
 printstatus(unsigned int iter)
 {
 	size_t i;
 	char status[MAXLEN];
 	const char *res;
+    int first_block = 1;  // Track the first visible block
 
 	for (i = 0; i < LEN(args); i++) {
 		if (!((!iter && !upsigno) || upsigno == SIGUSR1 ||
@@ -63,10 +66,23 @@ printstatus(unsigned int iter)
 			break;
 	}
 
-	status[0] = '\0';
-	for (i = 0; i < LEN(args); i++)
-		strcat(status, statuses[i]);
-	status[strlen(status)] = '\0';
+    status[0] = '\0';
+    for (i = 0; i < LEN(args); i++) {
+        // To skip empty blocks
+        if (statuses[i][0] == '\0') continue;
+
+        // Adding delimiter if its not the first block
+        if (!first_block) {
+            const char *delim = args[i].delim;
+            if (delim == NULL) delim = DEF_DELIM;
+            strcat(status, delim);
+        } else {
+            first_block = 0;
+        }
+        
+        // block content
+        strcat(status, statuses[i]);
+    }
 
 	if (sflag) {
 		puts(status);
