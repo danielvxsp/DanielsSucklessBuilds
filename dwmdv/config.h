@@ -1,6 +1,6 @@
 static unsigned int borderpx  	= 3;  /* border width */
 static unsigned int snap      	= 5;  /* snap to edge pixel */
-static const unsigned int gappx = 9;  /* window gap pixel */ 
+static const unsigned int gappx = 0;  /* window gap pixel */ 
 static const int vertpad        = 0;  /* vertical padding of bar */
 static const int sidepad        = 0;  /* horizontal padding of bar */
 static int showbar            	= 1;   
@@ -20,9 +20,9 @@ static char dmenufont[]       	= "monospace:size=11";
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
-static char selfgcolor[]            = "#eeeeee";
+static char selfgcolor[]            = "#005577";
 static char selbordercolor[]        = "#005577";
-static char selbgcolor[]            = "#005577";
+static char selbgcolor[]            = "#222222";
 static char *colors[][3] = {
        /*               fg           bg           border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
@@ -42,7 +42,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static float mfact     		= 0.55; /* Master window size */
 static int nmaster     		= 1;    /* number of clients in master area */
-static int resizehints 		= 1;    /* 1 means respect size hints in tiled resizals */
+static int resizehints 		= 0;    /* 1 means respect size hints in tiled resizals */
 static int lockfullscreen 	= 0;    /* 1 will force focus on the fullscreen window */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -63,10 +63,10 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-/* !! I personally use kitty as my default terminal WRNING: NOT SUCKLESS!!!! !! */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *termcmd[]  = { "st", NULL }; // Change terminal as per use case
+static const char *browser[] = { "librewolf", NULL };
 
 /* Xresources preferences to load at startup */
 ResourcePref resources[] = {
@@ -94,6 +94,13 @@ ResourcePref resources[] = {
 #include <X11/XF86keysym.h>
 static const Key keys[] = {
 	/* modifier                  key          function         argument */
+        { MODKEY,                    XK_w,        spawn,           {.v = browser } },
+        { MODKEY|ControlMask,        XK_Up,       spawn,           SHCMD("exec xdotool mousemove_relative -- 0 -15") },
+        { MODKEY|ControlMask,        XK_Down,     spawn,           SHCMD("exec xdotool mousemove_relative 0 15") },
+        { MODKEY|ControlMask,        XK_Right,    spawn,           SHCMD("exec xdotool mousemove_relative 15 0") },
+        { MODKEY|ControlMask,        XK_Left,     spawn,           SHCMD("exec xdotool mousemove_relative -- -15 0") },
+        { Mod1Mask,                  XK_F1,       spawn,           SHCMD("exec xdotool click 1") },
+	{ Mod1Mask,                  XK_F2,       spawn,           SHCMD("exec xdotool click 3") },
 	{ 0,XF86XK_AudioLowerVolume,              spawn,           SHCMD("pamixer --decrease 5 && pkill -RTMIN+1 slstatus") },
 	{ 0,XF86XK_AudioRaiseVolume,              spawn,           SHCMD("pamixer --increase 5 && pkill -RTMIN+1 slstatus") },
 	{ 0,XF86XK_AudioMute,                     spawn,           SHCMD("pamixer --toggle-mute && pkill -RTMIN+1 slstatus") },
