@@ -7,9 +7,13 @@ colors.Xresources is a custom pywal template to make the dynamic colorschemes wo
 dwm patches:
   - fullgaps
   - xresources
-  - autostart
-  - fixborders (Fixes weird alpha value on borders)
   - pertag
+  - autoraise (autoraises windows hovered over by the mouse)
+  - tagline (changes the square tag indicator to a rectangle)
+  - moveresize (allows to resize and move floating windows with keybinds)
+
+the bar height has also been tweaked to make the bar a little thicker, 
+make sure to change this in your dmenu.c too for consistency
 
 slstatus patches:
   - signals (Updates functions independently)
