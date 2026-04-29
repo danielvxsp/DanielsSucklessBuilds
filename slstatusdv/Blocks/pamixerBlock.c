@@ -27,7 +27,7 @@ volume(const char *unused) {
     } else {
         int current_volume;
         if (fscanf(fp, "%d", &current_volume) == 1) {
-            snprintf(vol, sizeof(vol), "\uf028 %d", current_volume); // Format output
+            snprintf(vol, sizeof(vol), "󰕾 %d", current_volume); // Format output
         } else {
             strcpy(vol, "N/A");
         }
