@@ -12,7 +12,7 @@ dwm patches:
   - autoraise (autoraises windows hovered over by the mouse)
   - tagline (changes the square tag indicator to a rectangle)
   - moveresize (allows to resize and move floating windows with keybinds)
-  - smartbar (adds all open client names to the bar instead of just focused)  
+  - fancybar (adds all open client names to the bar instead of just focused)  
 
 the bar height has also been tweaked to make the bar a little thicker, 
 make sure to change this in your dmenu.c too for consistency
