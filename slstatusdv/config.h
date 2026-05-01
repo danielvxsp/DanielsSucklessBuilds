@@ -25,8 +25,8 @@ static const char unknown_str[] = "n/a";
 static const struct arg args[] = {
     { datetime,             " [ %s]",       "%e-%m / %H:%M",  .turn = 60, .delim=NULL },
 
-//    { battery_icon,         "%s",            "BAT1",           .turn =30,  .delim=DEF_DELIM },
-//    { battery_remaining,    "[%s]",          "BAT1",           .turn =30,  .delim="" },
+//    { battery_icon,         "%s",            "BAT1",           .turn =3,   .delim=DEF_DELIM },
+//    { battery_remaining,    "[%s]",          "BAT1",           .turn =3,   .delim="" },
 
 	{ run_command,          "[%s]",          "systemps",       .turn = 10, .delim=DEF_DELIM },
     { cpu_perc,             "[󰻠 %s%%]",      NULL,             .turn = 2,  .delim=DEF_DELIM },
