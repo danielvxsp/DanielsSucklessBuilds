@@ -15,7 +15,7 @@ brightness(const char *unused) {
         // Strip newline characters from temp
 
         // Format the output string in buffer
-        snprintf(buffer, sizeof(buffer), "\uf522 %s", temp); // Only use temp here
+        snprintf(buffer, sizeof(buffer), "󰃠 %s", temp); // Only use temp here
 
         // Copy formatted output back to temp
         strncpy(temp, buffer, sizeof(temp) - 1);

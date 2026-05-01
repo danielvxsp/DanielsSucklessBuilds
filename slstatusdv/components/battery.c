@@ -111,6 +111,32 @@
 
 		return "";
 	}
+
+const char *
+battery_icon(const char *bat)
+{
+    int cap_perc, x_val;
+    char path[PATH_MAX];
+    const char *color = "#ffffff";
+
+    if (esnprintf(path, sizeof(path), POWER_SUPPLY_CAPACITY, bat) < 0)
+        return NULL;
+    if (pscanf(path, "%d", &cap_perc) != 1)
+        return NULL;
+
+    if (cap_perc > 100) cap_perc = 100;
+    if (cap_perc < 0) cap_perc = 0;
+
+    x_val = 23 - (cap_perc / 5);
+
+    if (cap_perc <= 20) {
+        color = "#aa3311"; 
+    } else if (cap_perc >= 80) {
+        color = "#11bb44"; 
+    }
+
+    return bprintf("^r0,7,2,4^^r2,4,22,10^^c#000000^^r3,5,20,8^^c%s^^r%d,5,20,8^^d^^f24^", color, x_val);
+}
 #elif defined(__OpenBSD__)
 	#include <fcntl.h>
 	#include <machine/apmvar.h>
