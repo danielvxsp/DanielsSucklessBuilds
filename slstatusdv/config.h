@@ -23,17 +23,17 @@ static const char unknown_str[] = "n/a";
 /* Custom status functions, add or remove blocks as per use case */
 
 static const struct arg args[] = {
-	{ datetime,             " [ %s]",       "%e-%m / %H:%M",  .turn = 60, .delim=NULL },
+	{ datetime,             " [ %s]",       "%F / %H:%M",  .turn = 60, .delim=NULL },
 
-//	{ battery_icon,         "%s",            "BAT1",           .turn =3,   .delim=DEF_DELIM },
-//	{ battery_remaining,    "[%s]",          "BAT1",           .turn =3,   .delim="" },
+	{ battery_icon,         "%s",            "BAT1",           .turn =3,   .delim=DEF_DELIM },
+	{ battery_remaining,    "[%s]",          "BAT1",           .turn =3,   .delim="" },
 
-	{ run_command,          "[%s]",          "systemps",       .turn = 10, .delim=DEF_DELIM },
-	{ cpu_perc,             "[󰻠 %s%%]",      NULL,             .turn = 2,  .delim=DEF_DELIM },
+//	{ run_command,          "[%s]",          "systemps",       .turn = 10, .delim=DEF_DELIM },
+//	{ cpu_perc,             "[󰻠 %s%%]",      NULL,             .turn = 2,  .delim=DEF_DELIM },
 
-//	{ brightness,           "[%s]",          "acpi_video0",    .turn = 0,  .signal = 2, .delim=DEF_DELIM },
+	{ brightness,           "[%s]",          "acpi_video0",    .turn = 0,  .signal = 2, .delim=DEF_DELIM },
 
 	{ volume_icon,               "[%s]",          NULL,             .turn = 0,  .signal = 1, .delim=DEF_DELIM },
-//	{ get_player_metadata,  "[ %s]",        NULL,             .turn = 1,  .delim=DEF_DELIM  },
+	{ get_player_metadata,  "[ %s]",        NULL,             .turn = 1,  .delim=DEF_DELIM  },
 };
 

@@ -4,7 +4,7 @@ const char* get_player_metadata() {
 
     // Command to fetch metadata from the currently playing player
     FILE *fp = popen(
-        "playerctl -a metadata --format '{{playerInstance}} {{status}} - {{title}}' 2>/dev/null | "
+        "playerctl -a metadata --format '{{playerInstance}} {{status}} {{title}}' 2>/dev/null | "
         "awk -F'Playing ' '/Playing/ {print substr($2, 1, 35); exit}'",
         "r"
     );
