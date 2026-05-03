@@ -20,5 +20,5 @@ const char* get_player_metadata() {
     }
 
     // Fallback if no player is playing or if the command fails
-    return "No audio playing";
+    return "||";
 }
