@@ -123,7 +123,7 @@ ResourcePref resources[] = {
 #include <X11/XF86keysym.h>
 static Key keys[] = {
     { 0,XF86XK_MonBrightnessUp,     spawn,          SHCMD("brightnessctl set 10%+ && pkill -RTMIN+2 slstatus") },
- 	{ 0,XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl set 10%- && pkill -RTMIN+2 slstatus") },
+	{ 0,XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl set 10%- && pkill -RTMIN+2 slstatus") },
     { 0,XF86XK_AudioLowerVolume,    spawn,          SHCMD("pamixer --decrease 5 && pkill -RTMIN+1 slstatus") },
     { 0,XF86XK_AudioRaiseVolume,    spawn,          SHCMD("pamixer --increase 5 && pkill -RTMIN+1 slstatus") },
 	{ 0,XF86XK_AudioMute,           spawn,          SHCMD("pamixer --toggle-mute && pkill -RTMIN+1 slstatus") },
