@@ -54,14 +54,10 @@ static char *colors[][3] = {
 static const char *tags[] = { "1", "2", "3", "4" };
 
 static const Rule rules[] = {
-    /* class                        instance title                 tags mask  isfloating  monitor */
-    { "Gimp",                         NULL,  NULL,                 0,         1,          -1 },
-    { "net-runelite-client-RuneLite", NULL,  "RuneLite",           0,         1,           1 },
-    { "net-runelite-client-RuneLite", NULL,  "Picture in Picture", 0,         1,          -1 },
-    { "Firefox",                      NULL,  NULL,                 1 << 8,    0,          -1 },
+	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
-
-
 
 /* layout(s) */
 static float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
@@ -123,7 +119,7 @@ ResourcePref resources[] = {
 #include <X11/XF86keysym.h>
 static Key keys[] = {
     { 0,XF86XK_MonBrightnessUp,     spawn,          SHCMD("brightnessctl set 10%+ && pkill -RTMIN+2 slstatus") },
-	{ 0,XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl set 10%- && pkill -RTMIN+2 slstatus") },
+ 	{ 0,XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl set 10%- && pkill -RTMIN+2 slstatus") },
     { 0,XF86XK_AudioLowerVolume,    spawn,          SHCMD("pamixer --decrease 5 && pkill -RTMIN+1 slstatus") },
     { 0,XF86XK_AudioRaiseVolume,    spawn,          SHCMD("pamixer --increase 5 && pkill -RTMIN+1 slstatus") },
 	{ 0,XF86XK_AudioMute,           spawn,          SHCMD("pamixer --toggle-mute && pkill -RTMIN+1 slstatus") },
@@ -158,11 +154,13 @@ static Key keys[] = {
 	{ MODKEY,            XK_minus,  setgaps,        {.i = -3 } },
 	{ MODKEY,            XK_plus,   setgaps,        {.i = +3 } },
 	{ MODKEY|ShiftMask,  XK_equal,  setgaps,        {.i = 0  } },
+	{ MODKEY,            XK_F5,     xrdb,           {.v = NULL } },
 	TAGKEYS(             XK_1,                      0)
 	TAGKEYS(             XK_2,                      1)
 	TAGKEYS(             XK_3,                      2)
 	TAGKEYS(             XK_4,                      3)
 	{ MODKEY|ShiftMask,  XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,  quit,    {1} }, 
 
 	// Keybinds to move windows in floating mode
 	{ MODKEY,                       XK_Down,  moveresize,     {.v = "0x 25y 0w 0h" } },

@@ -154,11 +154,13 @@ static Key keys[] = {
 	{ MODKEY,            XK_minus,  setgaps,        {.i = -3 } },
 	{ MODKEY,            XK_plus,   setgaps,        {.i = +3 } },
 	{ MODKEY|ShiftMask,  XK_equal,  setgaps,        {.i = 0  } },
+	{ MODKEY,            XK_F5,     xrdb,           {.v = NULL } },
 	TAGKEYS(             XK_1,                      0)
 	TAGKEYS(             XK_2,                      1)
 	TAGKEYS(             XK_3,                      2)
 	TAGKEYS(             XK_4,                      3)
 	{ MODKEY|ShiftMask,  XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,  quit,    {1} }, 
 
 	// Keybinds to move windows in floating mode
 	{ MODKEY,                       XK_Down,  moveresize,     {.v = "0x 25y 0w 0h" } },
