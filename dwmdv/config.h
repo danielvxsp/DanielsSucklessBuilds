@@ -5,8 +5,8 @@ static unsigned int snap        = 7;  /* snap pixel */
 static int showbar              = 1;  /* 0 means no bar */
 static int topbar               = 1;  /* 0 means bottom bar */
 static int autoraise_floating   = 1;  /* Autoraise on focus */
-static const char *fonts[]      = { "Terminus:size=12" };
-static const char dmenufont[]   = "Terminus:size=12";
+static const char *fonts[]      = { "Terminus (TTF):size=12" };
+static const char dmenufont[]   = "Terminus (TTF):size=12";
 
 /*
  * 0 means no systray
