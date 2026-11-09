@@ -73,6 +73,8 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    
 	{ "><>",      NULL },   
 	{ "[M]",      monocle },
+	{ "TTT",      bstack },
+	{ "===",      bstackhoriz },
 };
 
 /* key definitions */
@@ -161,6 +163,8 @@ static Key keys[] = {
 	TAGKEYS(             XK_2,                      1)
 	TAGKEYS(             XK_3,                      2)
 	TAGKEYS(             XK_4,                      3)
+	{ MODKEY,            XK_u,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,            XK_o,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY|ShiftMask,  XK_q,      quit,           {0} },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,  quit,    {1} }, 
 

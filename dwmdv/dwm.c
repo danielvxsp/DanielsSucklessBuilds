@@ -304,6 +304,8 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void xrdb(const Arg *arg);
 static void zoom(const Arg *arg);
+static void bstack(Monitor *m);
+static void bstackhoriz(Monitor *m);
 static void load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
 
@@ -981,9 +983,7 @@ drawbar(Monitor *m)
 		stw = getsystraywidth();
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon) { /* status is only drawn on selected monitor */
-		tw = m->ww - drawstatusbar(m, bh, stext);
-	}
+	tw = m->ww - drawstatusbar(m, bh, stext);
 
 	resizebarwin(m);
 	for (c = m->clients; c; c = c->next) {
@@ -2668,15 +2668,22 @@ updatesizehints(Client *c)
 	c->hintsvalid = 1;
 }
 
+
 void
 updatestatus(void)
 {
+	Monitor *m;
+
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
-	drawbar(selmon);
+
+	for (m = mons; m; m = m->next)
+		drawbar(m);
+
 	updatesystray();
 }
 
+// this redraws each monitor’s bar after the status text changes
 
 void
 updatesystrayicongeom(Client *i, int w, int h)
@@ -3068,4 +3075,66 @@ main(int argc, char *argv[])
 	cleanup();
 	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;
+}
+
+static void
+bstack(Monitor *m) {
+	int w, h, mh, mx, tx, ty, tw;
+	unsigned int i, n;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n == 0)
+		return;
+	if (n > m->nmaster) {
+		mh = m->nmaster ? m->mfact * m->wh : 0;
+		tw = m->ww / (n - m->nmaster);
+		ty = m->wy + mh;
+	} else {
+		mh = m->wh;
+		tw = m->ww;
+		ty = m->wy;
+	}
+	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+		if (i < m->nmaster) {
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
+			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
+			mx += WIDTH(c);
+		} else {
+			h = m->wh - mh;
+			resize(c, tx, ty, tw - (2 * c->bw), h - (2 * c->bw), 0);
+			if (tw != m->ww)
+				tx += WIDTH(c);
+		}
+	}
+}
+
+static void
+bstackhoriz(Monitor *m) {
+	int w, mh, mx, tx, ty, th;
+	unsigned int i, n;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n == 0)
+		return;
+	if (n > m->nmaster) {
+		mh = m->nmaster ? m->mfact * m->wh : 0;
+		th = (m->wh - mh) / (n - m->nmaster);
+		ty = m->wy + mh;
+	} else {
+		th = mh = m->wh;
+		ty = m->wy;
+	}
+	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+		if (i < m->nmaster) {
+			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
+			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
+			mx += WIDTH(c);
+		} else {
+			resize(c, tx, ty, m->ww - (2 * c->bw), th - (2 * c->bw), 0);
+			if (th != m->wh)
+				ty += HEIGHT(c);
+		}
+	}
 }
