@@ -14,6 +14,8 @@ dwm patches:
   - moveresize (allows to resize and move floating windows with keybinds)
   - fancybar (adds all open client names to the bar instead of just focused)  
   - status2d  
+  - statusallmons 
+  - bottomstack
 
 the bar height has also been tweaked to make the bar a little thicker, 
 make sure to change this in your dmenu.c too for consistency
