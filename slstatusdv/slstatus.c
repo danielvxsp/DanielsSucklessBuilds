@@ -51,12 +51,12 @@ printstatus(unsigned int iter)
 	size_t i;
 	char status[MAXLEN];
 	const char *res;
-    int first_block = 1;  // Track the first visible block
+	int first_block = 1;  // Track the first visible block
 
 	for (i = 0; i < LEN(args); i++) {
 		if (!((!iter && !upsigno) || upsigno == SIGUSR1 ||
 			(!upsigno && args[i].turn > 0 && !(iter % args[i].turn)) ||
-			(args[i].signal >= 0 && upsigno - SIGRTMIN == args[i].signal)))
+			(args[i].signal > 0 && upsigno - SIGRTMIN == args[i].signal)))
 			continue;
 
 		if (!(res = args[i].func(args[i].args)))
@@ -66,23 +66,23 @@ printstatus(unsigned int iter)
 			break;
 	}
 
-    status[0] = '\0';
-    for (i = 0; i < LEN(args); i++) {
-        // To skip empty blocks
-        if (statuses[i][0] == '\0') continue;
+	status[0] = '\0';
+	for (i = 0; i < LEN(args); i++) {
+		// To skip empty blocks
+		if (statuses[i][0] == '\0') continue;
 
-        // Adding delimiter if its not the first block
-        if (!first_block) {
-            const char *delim = args[i].delim;
-            if (delim == NULL) delim = DEF_DELIM;
-            strcat(status, delim);
-        } else {
-            first_block = 0;
-        }
-        
-        // block content
-        strcat(status, statuses[i]);
-    }
+		// Adding delimiter if its not the first block
+		if (!first_block) {
+			const char *delim = args[i].delim;
+			if (delim == NULL) delim = DEF_DELIM;
+			strcat(status, delim);
+		} else {
+			first_block = 0;
+		}
+
+		// block content
+		strcat(status, statuses[i]);
+	}
 
 	if (sflag) {
 		puts(status);
@@ -117,7 +117,7 @@ main(int argc, char *argv[])
 	ARGBEGIN {
 	case 'v':
 		die("slstatus-"VERSION);
-        break;
+		break;
 	case '1':
 		done = 1;
 		/* FALLTHROUGH */
@@ -157,15 +157,12 @@ main(int argc, char *argv[])
 			intspec.tv_nsec = (interval % 1000) * 1E6;
 			difftimespec(&wait, &intspec, &diff);
 
-			do {
-					if (errno == EINTR) {
-						printstatus(0);
-						errno = upsigno = 0;
-					}
-					ret = nanosleep(&wait, &wait);
-			} while (wait.tv_sec >= 0 && ret < 0 && !done);
-			if (ret < 0 && errno != EINTR)
-				die("nanosleep:");
+			while (wait.tv_sec >= 0 && (ret = nanosleep(&wait, &wait)) < 0 && !done) {
+				if (errno != EINTR)
+					die("nanosleep:");
+				printstatus(0);
+				errno = upsigno = 0;
+			}
 		}
 	} while (!done);
 

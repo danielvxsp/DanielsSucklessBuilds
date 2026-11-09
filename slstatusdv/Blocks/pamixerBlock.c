@@ -93,3 +93,38 @@ volume_icon(const char *unused)
     return bprintf("^c%s^^r0,8,3,5^^r3,6,3,9^^c#555555^^r8,9,16,2^^c%s^^r8,9,%d,4^^d^^f26^",
                    color, color, w_val);
 }
+
+const char *
+volume_bartxt(const char *unused)
+{
+    FILE *fp;
+    int vol = 0;
+    char bar[32] = ""; /* Buffer to hold the text bar */
+
+    fp = popen("pamixer --get-volume", "r");
+    if (fp != NULL) {
+        fscanf(fp, "%d", &vol);
+        pclose(fp);
+    }
+
+    if (vol > 100) vol = 100;
+    if (vol < 0) vol = 0;
+
+    int steps = (vol + 2) / 5;
+
+    for (int i = 0; i < 5; i++) {
+        if (steps >= (i * 4) + 4) {
+            strcat(bar, "█");     
+        } else if (steps == (i * 4) + 3) {
+            strcat(bar, "▓");     
+        } else if (steps == (i * 4) + 2) {
+            strcat(bar, "▒");     
+        } else if (steps == (i * 4) + 1) {
+            strcat(bar, "░");     
+        } else {
+            strcat(bar, " ");     
+        }
+    }
+
+    return bprintf("%s", bar);
+}
